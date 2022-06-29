@@ -14,3 +14,5 @@ Route::post("/login",  [APIController::class, "login"]);
 
 Route::get("/logout",  [APIController::class, "index"]);
 Route::post("/logout",  [APIController::class, "logout"]);
+
+Route::delete("/delete", [APIController::class, "delete"]);
