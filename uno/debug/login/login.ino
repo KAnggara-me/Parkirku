@@ -8,12 +8,11 @@ const char* password = "masihyanglama";
 String serverName = "http://parkirku.apiwa.tech/api/login";
 
 unsigned long lastTime = 0;
-// Set timer to 5 seconds (5000)
-unsigned long timerDelay = 5000;
+unsigned long timerDelay = 5000; // Set timer to 5 seconds (5000)
 
 void setup() {
   Serial.begin(115200);
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(2, OUTPUT);
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
@@ -42,18 +41,17 @@ void loop() {
       // Specify content-type header
       http.addHeader("Content-Type", "application/x-www-form-urlencoded");
       // Data to send with HTTP POST
-      String httpRequestData = "uid=abcdef";
+      String httpRequestData = "uid=lololo";
       // Send HTTP POST request
       int httpResponseCode = http.POST(httpRequestData);
 
       Serial.print("HTTP Response code: ");
       Serial.println(httpResponseCode);
 
-      if ((httpResponseCode >= 200 ) && (httpResponseCode < 300))
-      {
-        digitalWrite(LED_BUILTIN, HIGH);
+      if (httpResponseCode == 201) {
+        digitalWrite(2, HIGH);
       } else {
-        digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(2, LOW);
       }
 
       // Free resources

@@ -2,7 +2,7 @@
 #include <Adafruit_PN532.h>
 
 #define PN532_IRQ   (4)
-#define PN532_RESET (15)  // Not connected by default on the NFC Shield
+#define PN532_RESET (35)  // Not connected by default on the NFC Shield
 
 // Or use this line for a breakout or shield with an I2C connection:
 Adafruit_PN532 nfc(PN532_IRQ, PN532_RESET);
@@ -14,6 +14,8 @@ void setup(void) {
   while (!Serial) delay(10); // for Leonardo/Micro/Zero
 
   Serial.println("Hello!");
+  
+  Wire.begin(32, 33);
 
   nfc.begin();
 
