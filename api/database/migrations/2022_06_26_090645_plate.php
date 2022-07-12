@@ -19,7 +19,8 @@ return new class extends Migration
 			$table->string("image1")->nullable();
 			$table->string("image2")->nullable();
 			$table->integer("status")->default(0);
-			$table->string("plate_number")->nullable();
+			$table->string("plate1")->nullable();
+			$table->string("plate2")->nullable();
 			$table->dateTimeTz("login")->useCurrent();;
 			$table->dateTimeTz("logout")->nullable();
 			$table->timestamps();
