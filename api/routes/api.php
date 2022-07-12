@@ -9,10 +9,12 @@ Route::get("/", [APIController::class, "index"]);
 Route::get("/uid", [APIController::class, "get"]);
 Route::get("/uid/{id}", [APIController::class, "getById"]);
 
-Route::get("/login",  [APIController::class, "index"]);
 Route::post("/login",  [APIController::class, "login"]);
 
-Route::get("/logout",  [APIController::class, "index"]);
 Route::post("/logout",  [APIController::class, "logout"]);
 
 Route::delete("/delete", [APIController::class, "delete"]);
+
+Route::get("/last", [APIController::class, "getLast"]);
+
+Route::post("/update", [APIController::class, "update"]);

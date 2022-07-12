@@ -44,9 +44,15 @@ class APIController extends Controller
 		if (!$cek) {
 			return response()->json(["msg" => "Not OK"], 404, [], JSON_NUMERIC_CHECK);
 		}
+		$plate = Plate::where('uid', "=", $uid)->first();
 
-		Plate::where('uid', '=', $uid)->update(['status' => 0]);
-		return response()->json($cek, 201, [], JSON_NUMERIC_CHECK);
+		if ($plate->plate1 != $plate->plate2) {
+			return response()->json(["msg" => "Plate Not Match"], 406, [], JSON_NUMERIC_CHECK);
+		}
+
+		Plate::where('uid', '=', $uid)->update(['status' => 0, 'logout' => date('Y-m-d H:i:s')]);
+		$update = $cek = Plate::where('uid', "=", $uid)->first();
+		return response()->json($update, 201, [], JSON_NUMERIC_CHECK);
 	}
 
 	public function get(Request $request)
@@ -82,5 +88,21 @@ class APIController extends Controller
 		Plate::where("uid", "=", $uid)->delete();
 
 		return response()->json(["msg" => "Deleted"], 200, [], JSON_NUMERIC_CHECK);
+	}
+
+	public function getLast(Request $req)
+	{
+		$data = Plate::select("*")->get()->last();
+		return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+	}
+
+	public function update(Request $request)
+	{
+		$plate = $request->plate;
+		if (!$plate) {
+			return response()->json(["msg" => "Not OK"], 400, [], JSON_NUMERIC_CHECK);
+		}
+		Plate::select("*")->get()->last()->update(['status' => 2, 'plate1' => $plate]);
+		return response()->json(["msg" => "Updated"], 200, [], JSON_NUMERIC_CHECK);
 	}
 }
