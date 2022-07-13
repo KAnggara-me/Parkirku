@@ -11,6 +11,18 @@
 //Provide the RTDB payload printing info and other helper functions.
 #include "addons/RTDBHelper.h"
 
+#include <Stepper.h>
+
+const int steps_per_rev = 60; //Set to 200 for NIMA 17 360º
+// Set 50 for 90º
+#define IN1 14
+#define IN2 27
+#define IN3 26
+#define IN4 25
+#define RL 2
+
+Stepper motor(steps_per_rev, IN1, IN2, IN3, IN4);
+
 /* 1. Define the WiFi credentials */
 #define WIFI_SSID "Kos_oren"
 #define WIFI_PASSWORD "masihyanglama"
@@ -34,6 +46,11 @@ bool signupOK = false;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(15, OUTPUT);
+  pinMode(RL, OUTPUT);
+  digitalWrite(RL, LOW);
+  motor.setSpeed(75);
+  Serial.begin(115200);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   Serial.print("Connecting to Wi-Fi");
   while (WiFi.status() != WL_CONNECTED) {
@@ -44,8 +61,6 @@ void setup() {
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
   Serial.println();
-  pinMode(2, OUTPUT);
-  pinMode(15, OUTPUT);
 
   /* Assign the api key (required) */
   config.api_key = API_KEY;
@@ -68,22 +83,38 @@ void setup() {
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
 }
+int last = 0;
 
 void loop() {
+
   if (Firebase.ready() && signupOK && (millis() - sendDataPrevMillis > 1000 || sendDataPrevMillis == 0)) {
     sendDataPrevMillis = millis();
     if (Firebase.RTDB.getString(&fbdo, "/ParkirKu/io")) {
       intValue = fbdo.stringData().toInt();
       Serial.println(intValue);
-      if (intValue == 1) {
-        digitalWrite(2, HIGH);
+      if (intValue == 1 && last == 0) {
         digitalWrite(15, HIGH);
-      } else {
-        digitalWrite(2, LOW);
+        delay(500);
         digitalWrite(15, LOW);
+        buka();
+        last = 1;
+      } else if (intValue == 0 && last == 1) {
+        tutup();
+        last = 0;
       }
+      
     } else {
       Serial.println(fbdo.errorReason());
     }
   }
+}
+
+void buka() {
+  Serial.println("Rotating Anti-clockwise...");
+  motor.step(-steps_per_rev);
+}
+
+void tutup() {
+  Serial.println("Rotating Clockwise...");
+  motor.step(steps_per_rev);
 }

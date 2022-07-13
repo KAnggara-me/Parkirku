@@ -11,32 +11,30 @@ const int steps_per_rev = 60; //Set to 200 for NIMA 17 360º
 Stepper motor(steps_per_rev, IN1, IN2, IN3, IN4);
 
 
-void setup()
-{
+void setup() {
   pinMode(RL, OUTPUT);
   motor.setSpeed(75);
   Serial.begin(115200);
   digitalWrite(RL, LOW);
 }
 
-void loop()
-{
+void loop() {
   buka();
   tutup();
 }
 
 void buka() {
-//  digitalWrite(RL, LOW);
+  //  digitalWrite(RL, LOW);
   Serial.println("Rotating Anti-clockwise...");
   motor.step(-steps_per_rev);
-//  digitalWrite(RL, HIGH);
+  //  digitalWrite(RL, HIGH);
   delay(5000);
 }
 
 void tutup() {
-//  digitalWrite(RL, LOW);
+  //  digitalWrite(RL, LOW);
   Serial.println("Rotating Clockwise...");
   motor.step(steps_per_rev);
-//  digitalWrite(RL, HIGH);
+  //  digitalWrite(RL, HIGH);
   delay(5000);
 }
