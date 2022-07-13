@@ -1,6 +1,19 @@
 @extends('layouts.main')
 
 @section('content')
+  @if ($data->status === 4)
+    <div class="alert alert-danger h3 text-center">
+      <h3>Plat Tidak Sesuai</h3>
+    </div>
+  @elseif ($data->status === 0)
+    <div class="alert alert-info h3 text-center">
+      <h3>User Telah Keluar</h3>
+    </div>
+  @else
+    <div class="alert alert-primary h3 text-center">
+      <h3>User Telah Masuk</h3>
+    </div>
+  @endif
   <div class="row row-cols-1 row-cols-md-2 g-4 mb-5">
     <div class="col">
       <div class="card">

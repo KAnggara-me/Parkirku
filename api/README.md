@@ -6,11 +6,11 @@
 
 ## Status Code
 
-| Code | Description        |
-| :--: | :----------------- |
-|  0   | User Telah Keluar  |
-|  1   | User Masuk         |
-|  2   | Gambar didapatkan  |
-|  3   | Gambar Diperoses   |
-|  4   | Plat Didapatkan    |
-|  5   | Plat Tidak Terbaca |
+| Code | Description       |
+| :--: | :---------------- |
+|  0   | User Telah Keluar |
+|  1   | User Masuk        |
+|  2   | Plat didapatkan   |
+|  3   | Plat Diperoses    |
+|  4   | Plat Sesuai       |
+|  5   | Plat Tidak Sesuai |
