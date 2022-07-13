@@ -116,9 +116,15 @@ class APIController extends Controller
 			return response()->json(["msg" => "Not OK"], 400, [], JSON_NUMERIC_CHECK);
 		}
 
+		$data = Plate::select('*')->where('plate1', '=', $plate)->get()->last();
+
+		if (strtolower($plate) != strtolower($data->plate1)) {
+			return response()->json(["msg" => "Not OK"], 404, [], JSON_NUMERIC_CHECK);
+		}
+
 		$filename = $request->file('img')->store('plates-img');
 
-		Plate::select("*")->get()->last()->update(['status' => 2, 'plate1' => $plate, 'image1' => $filename]);
+		Plate::select("*")->get()->last()->update(['status' => 2, 'plate2' => $plate, 'image2' => $filename, 'logout' => date('Y-m-d H:i:s')]);
 		return response()->json(["msg" => "Updated"], 200, [], JSON_NUMERIC_CHECK);
 	}
 }

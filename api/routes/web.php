@@ -13,6 +13,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+use App\Http\Controllers\HomeController;
+
+Route::get('/about', function () {
+	return view('welcome');
+});
+
+Route::get("/", [HomeController::class, "index"]);
+
+Route::get('/review', function () {
+	return view('review', [
+		'title' => 'Review',
+	]);
+});
+
+Route::get('/report', function () {
+	return view('report', [
+		'title' => 'Report',
+	]);
 });

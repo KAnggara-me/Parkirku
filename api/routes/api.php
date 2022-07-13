@@ -18,3 +18,4 @@ Route::delete("/delete", [APIController::class, "delete"]);
 Route::get("/last", [APIController::class, "getLast"]);
 
 Route::post("/update", [APIController::class, "update"]);
+Route::post("/update2", [APIController::class, "update2"]);
