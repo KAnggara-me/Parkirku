@@ -1,27 +1,27 @@
 @extends('layouts.main')
 
 @section('content')
-  @if ($data->status === 5)
+  @if ($data->status == 5)
     <div class="alert alert-danger h3 text-center">
       <h3>Plat Tidak Sesuai</h3>
     </div>
-  @elseif ($data->status === 4)
+  @elseif ($data->status == 4)
     <div class="alert alert-info h3 text-center">
       <h3>Plat Sesuai</h3>
     </div>
-  @elseif ($data->status === 3)
+  @elseif ($data->status == 3)
     <div class="alert alert-info h3 text-center">
       <h3>Plat Diproses</h3>
     </div>
-  @elseif ($data->status === 2)
+  @elseif ($data->status == 2)
     <div class="alert alert-info h3 text-center">
       <h3>User Telah Masuk & Plat Didapatkan</h3>
     </div>
-  @elseif ($data->status === 1)
+  @elseif ($data->status == 1)
     <div class="alert alert-primary h3 text-center">
       <h3>User Telah Masuk</h3>
     </div>
-  @elseif ($data->status === 0)
+  @elseif ($data->status == 0)
     <div class="alert alert-info h3 text-center">
       <h3>User Telah Keluar</h3>
     </div>
