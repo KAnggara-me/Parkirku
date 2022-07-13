@@ -21,14 +21,8 @@ Route::get('/about', function () {
 
 Route::get("/", [HomeController::class, "index"]);
 
-Route::get('/review', function () {
-	return view('review', [
-		'title' => 'Review',
-	]);
-});
+Route::get("/review", [HomeController::class, "review"]);
+Route::get("/delete/{uid}", [HomeController::class, "delete"]);
+Route::get("/detail/{uid}", [HomeController::class, "detail"]);
 
-Route::get('/report', function () {
-	return view('report', [
-		'title' => 'Report',
-	]);
-});
+Route::get("/report", [HomeController::class, "report"]);

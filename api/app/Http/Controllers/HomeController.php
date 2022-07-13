@@ -16,4 +16,44 @@ class HomeController extends Controller
 			'data' => $data,
 		]);
 	}
+
+	public function review()
+	{
+		$data = Plate::select("*")->orderBy('login', 'desc')->get();
+
+		return view('review', [
+			'title' => 'Review',
+			'data' => $data,
+		]);
+	}
+
+	public function report()
+	{
+		$data = Plate::select("*")->get()->last();
+
+		return view('report', [
+			'title' => 'Report',
+			'data' => $data,
+		]);
+	}
+
+	public function delete(Request $req)
+	{
+		$uid = $req->uid;
+		$data = Plate::where("uid", "=", $uid);
+		$data->delete();
+
+		return redirect('/review')->with(['success' =>  $uid . ' Berhasil Dihapus']);
+	}
+
+	public function detail(Request $req)
+	{
+		$uid = $req->uid;
+		$data = Plate::select("*")->where("uid", "=", $uid)->get()->last();
+
+		return view('detail', [
+			'title' => 'Detail ' . $uid,
+			'data' => $data,
+		]);
+	}
 }
