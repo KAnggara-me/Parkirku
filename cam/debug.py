@@ -14,9 +14,9 @@ def parsing(plate):
 
 def main():
     print("Sending Image")
-    image = cv2.imread('4.jpg')  # Nama gambar (test.jpg)
+    image = cv2.imread('test.jpg')  # Nama gambar (test.jpg)
     regions = ['id']  # country code
-    with open('4.jpg', 'rb') as fp:  # Nama gambar (test.jpg)
+    with open('test.jpg', 'rb') as fp:  # Nama gambar (test.jpg)
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
             data=dict(regions=regions),  # Optional
@@ -32,6 +32,7 @@ def main():
     image = cv2.rectangle(image, (x1, y1), (x2, y2), (0, 0, 255), 2)
     image = cv2.putText(image, plate, (x1, y1-30),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    cv2.imwrite(str(plate)+".jpg", image)
 
     cv2.imshow("Hasil", image)
     cv2.waitKey(0)

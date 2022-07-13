@@ -51,7 +51,7 @@ def update_status(plate):
     myfiles = {'img': open("img/out/"+str(plate)+".jpg", 'rb')}
     data = {"plate": parsing(plate)}
     res = requests.post(
-        'http://parkirku.apiwa.tech/api/update',
+        'http://parkirku.apiwa.tech/api/update2',
         headers={'Authorization': 'Token 2aee723a0b2c2f11a4c9b4c2eefae6079a366bfb'},
         data=data,
         files=myfiles)
@@ -81,7 +81,7 @@ def main():
 
         if int >= 60:
             status = check_status()
-            if status == 1:
+            if status == 3:
                 cv2.imwrite("img/src/test.jpg", frame)
                 send_img()
             int = 0
