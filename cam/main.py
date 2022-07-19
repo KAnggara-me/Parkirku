@@ -1,5 +1,3 @@
-import threading
-import time
 import cv2
 from cv2 import imwrite
 import requests
@@ -11,10 +9,15 @@ cap.set(cv2.CAP_PROP_BUFFERSIZE, 3)  # set buffer size
 # print("After URL")
 
 
-def send_img():
+def send_img(status):
     image = cv2.imread('img/src/test.jpg')  # Nama gambar (test.jpg)
     print("Sending Image")
     regions = ['id']  # Change to your country
+    plate = 'BM 1234 ABC'  # Change to your plate
+    x1 = 0
+    x2 = 0
+    y1 = 0
+    y2 = 0
     with open('img/src/test.jpg', 'rb') as fp:
         response = requests.post(
             'https://api.platerecognizer.com/v1/plate-reader/',
@@ -34,7 +37,10 @@ def send_img():
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     cv2.imwrite("img/out/"+str(plate)+".jpg", image)
     print("Image Moved to img/out/"+str(plate)+".jpg")
-    update_status(plate)
+    if status == 1:
+        update_status(plate)
+    if status == 3:
+        update_status2(plate)
 
 
 def parsing(plate):
@@ -52,6 +58,17 @@ def update_status(plate):
     data = {"plate": parsing(plate)}
     res = requests.post(
         'http://parkirku.apiwa.tech/api/update',
+        headers={'Authorization': 'Token 2aee723a0b2c2f11a4c9b4c2eefae6079a366bfb'},
+        data=data,
+        files=myfiles)
+    print(res.status_code)
+
+
+def update_status2(plate):
+    myfiles = {'img': open("img/out/"+str(plate)+".jpg", 'rb')}
+    data = {"plate": parsing(plate)}
+    res = requests.post(
+        'http://parkirku.apiwa.tech/api/update2',
         headers={'Authorization': 'Token 2aee723a0b2c2f11a4c9b4c2eefae6079a366bfb'},
         data=data,
         files=myfiles)
@@ -81,9 +98,9 @@ def main():
 
         if int >= 60:
             status = check_status()
-            if status == 1:
+            if status == 1 or status == 3:
                 cv2.imwrite("img/src/test.jpg", frame)
-                send_img()
+                send_img(status)
             int = 0
 
     cap.release()

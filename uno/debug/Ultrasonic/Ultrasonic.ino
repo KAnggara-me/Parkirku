@@ -33,7 +33,7 @@ void loop() {
 
   // Convert to inches
   distanceInch = distanceCm * CM_TO_INCH;
-  if (distanceCm > 100) {
+  if (distanceCm > 20) {
     digitalWrite(2, LOW);
   } else {
     digitalWrite(2, HIGH);
