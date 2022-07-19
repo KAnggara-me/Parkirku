@@ -45,7 +45,7 @@ class APIController extends Controller
 			return response()->json(["msg" => "UID not Found"], 404, [], JSON_NUMERIC_CHECK);
 		}
 
-		Plate::where('uid', '=', $uid)->update(['status' => 3]);
+		Plate::where('uid', '=', $uid)->update(['status' => 3, 'logout' => date('Y-m-d H:i:s')]);
 		$update = Plate::where('uid', "=", $uid)->first();
 		return response()->json($update, 201, [], JSON_NUMERIC_CHECK);
 	}
@@ -85,7 +85,7 @@ class APIController extends Controller
 		return response()->json(["msg" => "Deleted"], 200, [], JSON_NUMERIC_CHECK);
 	}
 
-	public function getLast(Request $req)
+	public function getLast()
 	{
 		$data = Plate::select("*")->get()->last();
 		return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
@@ -115,7 +115,7 @@ class APIController extends Controller
 		$filename = $request->file('img')->store('plates-img');
 
 		if (strtolower($plate) != strtolower($data->plate1)) {
-			Plate::select("*")->get()->last()->update(['status' => 4, 'plate2' => $plate, 'image2' => $filename]);
+			Plate::select("*")->get()->last()->update(['status' => 5, 'plate2' => $plate, 'image2' => $filename]);
 			return response()->json(["msg" => "Plate Not Match"], 404, [], JSON_NUMERIC_CHECK);
 		}
 

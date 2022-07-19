@@ -34,7 +34,7 @@
         <div class="card-body">
           <h4 class="card-title">Plat : {{ $data->plate1 }}</h4>
           <hr>
-          <h5 class="card-title">UID : {{ $data->uid }}{{ $data->status }}</h5>
+          <h5 class="card-title">UID : {{ $data->uid }}</h5>
           <h5 class="card-title">Masuk pada : {{ $data->login }}</h5>
         </div>
       </div>
