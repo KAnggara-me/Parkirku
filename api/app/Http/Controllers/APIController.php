@@ -60,7 +60,6 @@ class APIController extends Controller
 
 	public function getById(Request $request)
 	{
-		$token = $request->header('Authorization');
 		$id = $request->id;
 
 		$uid = Plate::select('*')->where('id', "=", $id)->first();
@@ -102,6 +101,12 @@ class APIController extends Controller
 
 		Plate::select("*")->get()->last()->update(['status' => 2, 'plate1' => $plate, 'image1' => $filename]);
 		return response()->json(["msg" => "Updated"], 200, [], JSON_NUMERIC_CHECK);
+	}
+
+	public function keluar()
+	{
+		Plate::select("*")->get()->last()->update(['status' => 3]);
+		return response()->json(["msg" => "Request for Quit"], 200, [], JSON_NUMERIC_CHECK);
 	}
 
 	public function update2(Request $request)
