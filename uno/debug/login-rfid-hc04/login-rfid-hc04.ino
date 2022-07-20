@@ -1,8 +1,9 @@
-// Jangan ubah urutanya!!!
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Wire.h>
 #include <Adafruit_PN532.h>
+
+#include <Stepper.h>
 
 #include "auth.h"
 
@@ -10,9 +11,19 @@
 #define PN532_IRQ   (4)
 #define PN532_RESET (15)  // Not connected by default on the NFC Shield
 
+// Ultrasonic
 #define TRIG (13)
 #define ECHO (12)
 #define LED (2)
+
+// Stepper
+const int steps_per_rev = 60; //Set to 200 for NIMA 17 360º
+// Set 50 for 90º
+#define IN1 14
+#define IN2 27
+#define IN3 26
+#define IN4 25
+#define RL 2
 
 // UltraSonic Section
 //define sound speed in cm/uS
@@ -32,17 +43,24 @@ unsigned long timerDelay = 5000;
 String tagId = "None";
 long duration;
 float distanceCm;
+int last = 0;
 
 // RFID Object
 // Or use this line for a breakout or shield with an I2C connection:
 Adafruit_PN532 nfc(PN532_IRQ, PN532_RESET);
 
+// Stepper Object
+Stepper motor(steps_per_rev, IN1, IN2, IN3, IN4);
 
 void setup() {
+  motor.setSpeed(75); // Steper Speed
   Serial.begin(115200);
   pinMode(LED, OUTPUT);
   pinMode(TRIG, OUTPUT); // Sets the trigPin as an Output
+  pinMode(RL, OUTPUT); // Relay as Output
   pinMode(ECHO, INPUT); // Sets the echoPin as an Input
+
+  digitalWrite(RL, LOW); // Relay init State
 
   wifi();
   init();
@@ -86,7 +104,7 @@ void rfidInit() {
 
 void loop() {
   readRFID();
-  //  ultrasonic();
+  ultrasonic();
   delay(1000);
 }
 
@@ -117,6 +135,7 @@ void checkWifi() {
     sendData();
   } else if (WiFi.status() != WL_CONNECTED) {
     Serial.println("Reconnecting to WiFi...");
+
     WiFi.disconnect();
     WiFi.reconnect();
   } else {
@@ -142,8 +161,12 @@ void sendData() {
   Serial.print("HTTP Response code: ");
   Serial.println(httpResponseCode);
 
-  if (httpResponseCode == 201)
-  {
+  if (httpResponseCode == 201  && last == 0) {
+    digitalWrite(15, HIGH);
+    delay(500);
+    digitalWrite(15, LOW);
+    buka();
+    last = 1;
     digitalWrite(LED, HIGH);
     // Open Gate
   } else {
@@ -155,28 +178,41 @@ void sendData() {
   http.end();
 }
 
-//void ultrasonic() {
-//  // Clears the trigPin
-//  digitalWrite(trigPin, LOW);
-//  delayMicroseconds(2);
-//  // Sets the trigPin on HIGH state for 10 micro seconds
-//  digitalWrite(trigPin, HIGH);
-//  delayMicroseconds(10);
-//  digitalWrite(trigPin, LOW);
-//
-//  // Reads the echoPin, returns the sound wave travel time in microseconds
-//  duration = pulseIn(echoPin, HIGH);
-//
-//  // Calculate the distance
-//  distanceCm = duration * SOUND_SPEED / 2;
-//
-//  if (distanceCm > 100) {
-//    digitalWrite(2, LOW);
-//  } else {
-//    digitalWrite(2, HIGH);
-//  }
-//
-//  // Prints the distance in the Serial Monitor
-//  Serial.print("Distance (cm): ");
-//  Serial.println(distanceCm);
-//}
+void ultrasonic() {
+  // Clears the trigPin
+  digitalWrite(TRIG, LOW);
+  delayMicroseconds(2);
+  // Sets the trigPin on HIGH state for 10 micro seconds
+  digitalWrite(TRIG, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG, LOW);
+
+  // Reads the echoPin, returns the sound wave travel time in microseconds
+  duration = pulseIn(ECHO, HIGH);
+
+  // Calculate the distance
+  distanceCm = duration * SOUND_SPEED / 2;
+
+  if (distanceCm > 100  && last == 1) {
+    digitalWrite(2, LOW);
+  } else {
+    digitalWrite(2, HIGH);
+  }
+
+  // Prints the distance in the Serial Monitor
+  Serial.print("Distance (cm): ");
+  Serial.println(distanceCm);
+}
+
+
+void tutup() {
+  Serial.println("Tutup portal...");
+  motor.step(-steps_per_rev);
+  delay(5000);
+}
+
+void buka() {
+  Serial.println("Buka portal...");
+  motor.step(steps_per_rev);
+  delay(5000);
+}
