@@ -47,7 +47,7 @@
         <div class="card-body">
           <h4 class="card-title">Plat : {{ $data->plate2 }}</h4>
           <hr>
-          <h5 class="card-title">UID : {{ $data->uid }}{{ $data->status }}</h5>
+          <h5 class="card-title">UID : {{ $data->uid }}</h5>
           <h5 class="card-title">Keluar pada : {{ $data->logout != null ? $data->logout : 'Belum Keluar' }}</h5>
         </div>
       </div>
