@@ -121,12 +121,12 @@ class APIController extends Controller
 		$filename = $request->file('img')->store('plates-img');
 
 		if (strtolower($plate) != strtolower($data->plate1)) {
-			Plate::select("*")->get()->last()->update(['status' => 5, 'plate2' => $plate, 'image2' => $filename]);
+			Plate::select("*")->where('plate1', '=', $plate)->get()->last()->update(['status' => 5, 'plate2' => $plate, 'image2' => $filename]);
 			return response()->json(["msg" => "Plate Not Match"], 404, [], JSON_NUMERIC_CHECK);
 		}
 
 		date_default_timezone_set('Asia/Jakarta');
-		Plate::select("*")->get()->last()->update(['status' => 0, 'plate2' => $plate, 'image2' => $filename, 'logout' => date('Y-m-d H:i:s')]);
+		Plate::select("*")->where('plate1', '=', $plate)->get()->last()->update(['status' => 0, 'plate2' => $plate, 'image2' => $filename, 'logout' => date('Y-m-d H:i:s')]);
 		return response()->json(["msg" => "Updated"], 200, [], JSON_NUMERIC_CHECK);
 	}
 }
