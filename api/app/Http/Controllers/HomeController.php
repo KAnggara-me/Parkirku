@@ -52,7 +52,7 @@ class HomeController extends Controller
 		$data = Plate::select("*")->where("uid", "=", $uid)->get()->last();
 
 		return view('detail', [
-			'title' => 'Detail ' . $uid,
+			'title' => 'Detail ' . $data['plate1'],
 			'data' => $data,
 		]);
 	}
