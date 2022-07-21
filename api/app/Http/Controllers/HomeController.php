@@ -29,8 +29,12 @@ class HomeController extends Controller
 
 	public function report()
 	{
-		$data = Plate::select("*")->get()->last();
-
+		$data =
+			Plate::orderBy('login')->get()->groupBy(
+				function ($item) {
+					return $item->created_at->format('Y-m-d');
+				}
+			);
 		return view('report', [
 			'title' => 'Report',
 			'data' => $data,
