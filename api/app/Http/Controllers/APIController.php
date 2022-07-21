@@ -121,7 +121,11 @@ class APIController extends Controller
 		$filename = $request->file('img')->store('plates-img');
 
 		if (strtolower($plate) != strtolower($data->plate1)) {
-			Plate::select("*")->where('plate1', '=', $plate)->get()->last()->update(['status' => 5, 'plate2' => $plate, 'image2' => $filename]);
+			$uid = $request->uid;
+			if (!$uid) {
+				return response()->json(["msg" => "Not OK"], 400, [], JSON_NUMERIC_CHECK);
+			}
+			Plate::select("*")->where('uid', '=', $uid)->get()->last()->update(['status' => 5, 'plate2' => $plate, 'image2' => $filename]);
 			return response()->json(["msg" => "Plate Not Match"], 404, [], JSON_NUMERIC_CHECK);
 		}
 
