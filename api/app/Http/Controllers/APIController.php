@@ -120,7 +120,7 @@ class APIController extends Controller
 		$data = Plate::select('*')->where('plate1', '=', $plate)->get()->last();
 		$filename = $request->file('img')->store('plates-img');
 
-		if (strtolower($plate) != strtolower($data->plate1)) {
+		if (!$data) {
 			$uid = $request->uid;
 			if (!$uid) {
 				return response()->json(["msg" => "Not OK"], 400, [], JSON_NUMERIC_CHECK);
