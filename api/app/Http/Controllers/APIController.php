@@ -45,6 +45,7 @@ class APIController extends Controller
 			return response()->json(["msg" => "UID not Found"], 404, [], JSON_NUMERIC_CHECK);
 		}
 
+		date_default_timezone_set('Asia/Jakarta');
 		Plate::where('uid', '=', $uid)->update(['status' => 3, 'logout' => date('Y-m-d H:i:s')]);
 		$update = Plate::where('uid', "=", $uid)->first();
 		return response()->json($update, 201, [], JSON_NUMERIC_CHECK);
@@ -124,6 +125,7 @@ class APIController extends Controller
 			return response()->json(["msg" => "Plate Not Match"], 404, [], JSON_NUMERIC_CHECK);
 		}
 
+		date_default_timezone_set('Asia/Jakarta');
 		Plate::select("*")->get()->last()->update(['status' => 0, 'plate2' => $plate, 'image2' => $filename, 'logout' => date('Y-m-d H:i:s')]);
 		return response()->json(["msg" => "Updated"], 200, [], JSON_NUMERIC_CHECK);
 	}
