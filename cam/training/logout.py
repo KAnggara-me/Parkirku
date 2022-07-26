@@ -50,7 +50,7 @@ def update_status(plate, i):
 
 
 def main():
-    for i in range(21, 22, 1):
+    for i in range(1, 42, 1):
         send_img(i)
 
 

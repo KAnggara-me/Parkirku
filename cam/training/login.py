@@ -58,7 +58,7 @@ def login(i):
 
 
 def main():
-    for i in range(21, 22, 1):
+    for i in range(1, 42, 1):
         login(i)
         send_img(i)
 
